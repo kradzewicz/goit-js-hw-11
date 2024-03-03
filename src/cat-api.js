@@ -1,8 +1,7 @@
 import axios from 'axios';
 import Notiflix from 'notiflix';
-
+const breedList = [{ text: 'Choose breed', value: '1', disabled: true }];
 export const fetchBreeds = () => {
-  breedList = [{ text: 'Choose breed', value: '1', disabled: true }];
   axios.defaults.headers.common['x-api-key'] =
     'live_rppLWDqrF7GRbyg80GB6LarZCtJHJNCF5MSE72DSBcetOqiyl44xAJDxPnmqVmUg';
   return axios
