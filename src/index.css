@@ -1,23 +1,23 @@
 body {
   background-image: url(https://www.cuttingedgestencils.com/cdn-cgi/image/format=auto/media/catalog/product/cache/5a9c86c994811ff6e179c4e9056b5fd8/C/a/Cat-Paw-Prints-stencil_16.jpg);
-  background-size: 120px;
+  background-size: 180px;
   background-repeat: repeat;
 }
 
 .breed-select {
   margin: 20px;
-  width: 50%;
+  width: 800px;
 }
 .catBox {
   background-color: hsla(0, 0%, 100%, 0.803);
   display: flex;
-
   border-radius: 10%;
   align-items: center;
+  padding-left: 20px;
 }
 
 .catBox--description {
-  padding: 20px;
+  padding: 50px;
 }
 .catBox img {
   border-radius: 10%;
