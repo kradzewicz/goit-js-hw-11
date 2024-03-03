@@ -1,0 +1,76 @@
+body {
+  background-image: url(https://www.cuttingedgestencils.com/cdn-cgi/image/format=auto/media/catalog/product/cache/5a9c86c994811ff6e179c4e9056b5fd8/C/a/Cat-Paw-Prints-stencil_16.jpg);
+  background-size: 120px;
+  background-repeat: repeat;
+}
+
+.breed-select {
+  margin: 20px;
+  width: 50%;
+}
+.catBox {
+  background-color: hsla(0, 0%, 100%, 0.803);
+  display: flex;
+
+  border-radius: 10%;
+  align-items: center;
+}
+
+.catBox--description {
+  padding: 20px;
+}
+.catBox img {
+  border-radius: 10%;
+}
+
+.hidden {
+  display: none;
+}
+
+.loader {
+  width: 100px;
+  height: 100px;
+  background-color: white;
+  border: 5px dotted black;
+  border-style: solid solid dotted dotted;
+  border-radius: 50%;
+  position: relative;
+  top: 15%;
+  left: 47%;
+  box-sizing: border-box;
+  animation: rotation 2s linear infinite;
+}
+.loader::after {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  border: 5px dotted grey;
+  border-style: solid solid dotted;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  animation: rotationBack 1s linear infinite;
+  transform-origin: center center;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotationBack {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
