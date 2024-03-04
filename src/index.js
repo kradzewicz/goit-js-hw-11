@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Notiflix from 'notiflix';
-// import simpleLightbox from 'simplelightbox';
+import simpleLightbox from 'simplelightbox';
 
 const gallery = document.querySelector('.gallery');
 const searchForm = document.querySelector('#search-form');
@@ -11,6 +11,7 @@ let currentInput;
 let currentPage = 1;
 let totalHits;
 let perPage;
+let galleryLightbox;
 
 searchForm.addEventListener('submit', async e => {
   e.preventDefault();
@@ -74,7 +75,9 @@ async function renderImages(currentPage) {
         downloads,
       }) =>
         `<div class="photo-card">
+        <a href="${largeImageURL}">
         <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+        </a>
         <div class="info">
           <p class="info-item">
             <b>Likes</b>
@@ -98,6 +101,7 @@ async function renderImages(currentPage) {
     .join('');
   gallery.insertAdjacentHTML('beforeend', markupArray);
   loadBtn.classList.remove('hidden');
+  renderLightbox();
   if (totalHits <= 0) {
     loadBtn.classList.add('hidden');
 
@@ -114,3 +118,7 @@ function loadMore() {
 }
 
 loadBtn.addEventListener('click', loadMore);
+
+const renderLightbox = () => {
+  galleryLightbox = new simpleLightbox('.gallery a');
+};
