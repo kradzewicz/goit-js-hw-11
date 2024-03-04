@@ -1,6 +1,7 @@
 body {
   background-color: whitesmoke;
 }
+
 header {
   padding: 20px;
   display: flex;
@@ -8,9 +9,20 @@ header {
   justify-content: center;
 }
 
+.hidden {
+  display: none;
+}
+
 .search-form {
   background-color: grey;
   box-shadow: 0 0 10px 8px grey;
+}
+
+.search-form input {
+  width: 300px;
+}
+.search-form input:active {
+  border: 2px solid gray;
 }
 
 .gallery {

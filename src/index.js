@@ -1,13 +1,16 @@
-// 42678880-eadc4e4c35901791582abd4fa
 import axios from 'axios';
 import Notiflix from 'notiflix';
-// import Notiflix from 'notiflix';
 // import simpleLightbox from 'simplelightbox';
 
 const gallery = document.querySelector('.gallery');
 const searchForm = document.querySelector('#search-form');
 const searchInput = document.querySelector('[name="searchQuery"]');
 const loadBtn = document.querySelector('.load-more');
+
+let currentInput;
+let currentPage = 1;
+let totalHits;
+let perPage;
 
 searchForm.addEventListener('submit', async e => {
   e.preventDefault();
@@ -18,10 +21,19 @@ searchForm.addEventListener('submit', async e => {
     });
     return;
   }
-  renderImages();
+
+  if (currentInput === searchInput.value.trim()) {
+    loadMore();
+  } else {
+    gallery.innerHTML = '';
+    currentPage = 1;
+    await renderImages(currentPage);
+  }
+
+  currentInput = searchInput.value.trim();
 });
 
-async function renderImages() {
+async function renderImages(currentPage) {
   const response = await axios.get('https://pixabay.com/api/', {
     params: {
       key: '42678880-eadc4e4c35901791582abd4fa',
@@ -30,11 +42,26 @@ async function renderImages() {
       orientation: 'horizontal',
       safesearch: 'true',
       per_page: 40,
-      page: 1,
+      page: currentPage,
     },
   });
 
   const hitsArray = await response.data.hits;
+  perPage = hitsArray.length;
+
+  if (currentPage === 1) {
+    totalHits = await response.data.total;
+    if (totalHits === 0) {
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+      return;
+    }
+    Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+  }
+
+  totalHits -= perPage;
+
   const markupArray = hitsArray
     .map(
       ({
@@ -70,4 +97,20 @@ async function renderImages() {
     )
     .join('');
   gallery.insertAdjacentHTML('beforeend', markupArray);
+  loadBtn.classList.remove('hidden');
+  if (totalHits <= 0) {
+    loadBtn.classList.add('hidden');
+
+    Notiflix.Notify.info(
+      "We're sorry, but you've reached the end of search results."
+    );
+  }
 }
+
+function loadMore() {
+  loadBtn.classList.add('hidden');
+  currentPage += 1;
+  renderImages(currentPage);
+}
+
+loadBtn.addEventListener('click', loadMore);
