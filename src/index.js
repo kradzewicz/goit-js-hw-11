@@ -1,55 +1,73 @@
-import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
-import SlimSelect from 'slim-select';
-import './slime-select.css';
+// 42678880-eadc4e4c35901791582abd4fa
+import axios from 'axios';
 import Notiflix from 'notiflix';
+// import Notiflix from 'notiflix';
+// import simpleLightbox from 'simplelightbox';
 
-const breedSelect = document.querySelector('[title="breed-selector"]');
-breedSelect.classList.add('hidden');
-const catInfo = document.querySelector('.cat-info');
-const loader = document.querySelector('.loader');
-const error = document.querySelector('.error');
+const gallery = document.querySelector('.gallery');
+const searchForm = document.querySelector('#search-form');
+const searchInput = document.querySelector('[name="searchQuery"]');
+const loadBtn = document.querySelector('.load-more');
 
-try {
-  loader.classList.remove('hidden');
-  fetchBreeds().then(breedList => {
-    new SlimSelect({
-      select: '.breed-select',
-      settings: {
-        showSearch: false,
-        placeholder: 'Choose breed',
-      },
-      data: breedList,
+searchForm.addEventListener('submit', async e => {
+  e.preventDefault();
+
+  if (searchInput.value.trim() === '') {
+    Notiflix.Notify.failure('Fill search input with at least one word', {
+      timeout: 3000,
     });
-    loader.classList.add('hidden');
-    breedSelect.classList.remove('hidden');
-  });
-} catch (error) {
-  console.log(error);
-}
-
-breedSelect.addEventListener('change', event => {
-  if (catInfo.hasChildNodes()) {
-    const child = catInfo.firstElementChild;
-    child.remove();
+    return;
   }
-
-  fetchCatByBreed(event.target.value).then(data => renderCat(data[0]));
-  loader.classList.remove('hidden');
+  renderImages();
 });
 
-function renderCat(catData) {
-  const { url } = catData;
-  const { description, name, temperament } = catData.breeds[0];
-  catInfo.insertAdjacentHTML(
-    'beforeend',
-    `<div class="catBox">
-        <img src="${url}" alt="${name}" width=500/>
-        <div class="catBox--description">
-            <h2>${name}</h2>
-            <p>${description}</p>
-            <p><strong>Temperament:</strong> ${temperament}</p>
+async function renderImages() {
+  const response = await axios.get('https://pixabay.com/api/', {
+    params: {
+      key: '42678880-eadc4e4c35901791582abd4fa',
+      q: searchInput.value.trim(),
+      image_type: 'photo',
+      orientation: 'horizontal',
+      safesearch: 'true',
+      per_page: 40,
+      page: 1,
+    },
+  });
+
+  const hitsArray = await response.data.hits;
+  const markupArray = hitsArray
+    .map(
+      ({
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) =>
+        `<div class="photo-card">
+        <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+        <div class="info">
+          <p class="info-item">
+            <b>Likes</b>
+            <span>${likes}</span>
+          </p>
+          <p class="info-item">
+            <b>Views</b>
+            <span>${views}</span>
+          </p>
+          <p class="info-item">
+            <b>Comments</b>
+            <span>${comments}</span>
+          </p>
+          <p class="info-item">
+            <b>Downloads</b>
+            <span>${downloads}</span>
+          </p>
         </div>
-    </div>`
-  );
-  loader.classList.add('hidden');
+      </div>`
+    )
+    .join('');
+  gallery.insertAdjacentHTML('beforeend', markupArray);
 }

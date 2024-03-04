@@ -1,20 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="index.css" />
-
-    <title>Homework 10</title>
+    <title>Image searcher</title>
+    <link rel="stylesheet" href="./index.css" />
   </head>
   <body>
-    <select title="breed-selector" class="breed-select"></select>
-    <p class="loader hidden"></p>
-    <p class="error hidden">
-      Oops! Something went wrong! Try reloading the page!
-    </p>
-    <div class="cat-info"></div>
+    <header>
+      <form class="search-form" id="search-form">
+        <input
+          type="text"
+          name="searchQuery"
+          autocomplete="off"
+          placeholder="Search images..."
+        />
+        <button type="submit">Search</button>
+      </form>
+    </header>
 
-    <script src="index.js" type="module"></script>
+    <div class="gallery"></div>
+    <button type="button" class="load-more">Load more</button>
   </body>
+  <script type="module" src="./index.js"></script>
 </html>
